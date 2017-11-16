@@ -1,0 +1,126 @@
+﻿<Window x:Class="DistributedExpressions.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DistributedExpressions"
+        mc:Ignorable="d"
+        Title="Distributed Expressions" Height="350" Width="525" Closing="Window_Closing" >
+    <Grid Background="Black">
+        <Grid x:Name="loadGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Label x:Name="loadLabel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="0" Grid.ColumnSpan="2" Content="Choose your connection type:" Foreground="#FF8EBCFF" Margin="10,10,10,0" />
+            <Label x:Name="connectLabel" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Connecting..." Foreground="#FF8EBCFF" Visibility="Collapsed" />
+            <Label x:Name="localButton" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1" Content="Local" Foreground="#FF0068FF" Margin="0,0,5,0" FontStyle="Italic" MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" MouseDown="localButton_MouseDown" />
+            <Label x:Name="publicButton" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Content="Public" Foreground="#FF0068FF" Margin="5,0,0,0" FontStyle="Italic" MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" MouseDown="publicButton_MouseDown" />
+            <Label x:Name="loadLogsButton" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="1" Margin="0,-10,0,0" Content="Logs" Foreground="#FF0068FF" FontStyle="Italic" MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" MouseDown="logButton_MouseDown" FontSize="9.333" />
+        </Grid>
+        <Grid x:Name="mainGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="28" />
+                <RowDefinition Height="28" />
+                <RowDefinition Height="28" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="70" />
+            </Grid.ColumnDefinitions>
+            <Menu x:Name="menu" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.ColumnSpan="3" Background="Black" Foreground="#FF8EBCFF" >
+                <MenuItem x:Name="menuSet" Header="Set Variable" Click="menuSet_Click" />
+                <MenuItem x:Name="menuRemove" Header="Remove Variable" Click="menuRemove_Click"/>
+                <MenuItem x:Name="menuClear" Header="Clear Variables" Click="menuClear_Click"/>
+                <MenuItem x:Name="menuDisconnect" Header="Disconnect" Click="menuDisconnect_Click" />
+            </Menu>
+            <Label x:Name="varViewTitle" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Content="Local Variables (Count: 0):" Foreground="#FF8EBCFF" />
+            <ListBox x:Name="varView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.ColumnSpan="3" Background="#FF30333E" BorderBrush="{x:Null}" Foreground="White" ScrollViewer.VerticalScrollBarVisibility="Visible" BorderThickness="0" />
+            <TextBox x:Name="exprBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="1" TextWrapping="NoWrap" Background="#FF252930" BorderBrush="{x:Null}" CaretBrush="#FF79BCFF" Foreground="#FFD6E8FF" BorderThickness="0" MaxLines="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" VerticalContentAlignment="Center" TextChanged="exprBox_TextChanged" KeyDown="exprBox_KeyDown" />
+            <Label x:Name="exprLabel" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Content="Expression:" Foreground="#FF8EBCFF" />
+            <TextBox x:Name="resultBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Grid.Column="1" TextWrapping="NoWrap" Background="#FF252930" BorderBrush="{x:Null}" CaretBrush="#FF79BCFF" Foreground="#FFD6E8FF" BorderThickness="0" MaxLines="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" VerticalContentAlignment="Center" IsReadOnly="True" />
+            <Label x:Name="resultLabel" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" Content="Result:" Foreground="#FF8EBCFF" />
+            <Label x:Name="execButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="3" Content="Execute" Foreground="#FF0068FF" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" MouseDown="execButton_MouseDown" >
+                <Label.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                <RotateTransform Angle="270" CenterY="0.5" CenterX="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF252930" Offset="0"/>
+                        <GradientStop Color="Black" Offset="1"/>
+                    </LinearGradientBrush>
+                </Label.Background>
+            </Label>
+            <Label x:Name="logButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="4" Content="Logs" Foreground="#FF0068FF" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave" MouseDown="logButton_MouseDown" >
+                <Label.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                <RotateTransform Angle="270" CenterY="0.5" CenterX="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF252930" Offset="0"/>
+                        <GradientStop Color="Black" Offset="1"/>
+                    </LinearGradientBrush>
+                </Label.Background>
+            </Label>
+            <StatusBar x:Name="statusBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" Background="SteelBlue" Foreground="Black" >
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem Grid.Column="0" >
+                    <Label x:Name="statusExec" Foreground="White" HorizontalAlignment="Left" Content="Ready" FontSize="9.333" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="1" >
+                    <ProgressBar x:Name="statusBusyBar" BorderBrush="{x:Null}" Foreground="SteelBlue" Background="White" Height="20" Width="50" IsIndeterminate="True" />
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" >
+                    <Label x:Name="statusStretch" />
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="3" >
+                    <Label x:Name="statusVal" Foreground="White" HorizontalAlignment="Left" Content="Connected" FontSize="9.333" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="4" >
+                    <Label x:Name="statusLocalIp" Foreground="White" HorizontalAlignment="Left" Content="Local IP: 192.168.0.100" FontSize="9.333" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="20,0,0,0" />
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="5" >
+                    <Label x:Name="statusPublicIp" Foreground="White" HorizontalAlignment="Left" Content="Public IP: 192.168.100.100" FontSize="9.333" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="8,0,0,0" />
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="6" >
+                    <Label x:Name="statusPort" Foreground="White" HorizontalAlignment="Left" Content="Port: 12345" FontSize="9.333" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="8,0,0,0" />
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+    </Grid>
+</Window>
